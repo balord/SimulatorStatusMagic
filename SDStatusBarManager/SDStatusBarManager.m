@@ -32,6 +32,10 @@
 static NSString * const SDStatusBarManagerUsingOverridesKey = @"using_overrides";
 static NSString * const SDStatusBarManagerBluetoothStateKey = @"bluetooth_state";
 static NSString * const SDStatusBarManagerTimeStringKey = @"time_string";
+static NSString * const SDStatusBarManagerDataNetworkModeKey = @"data_network_mode";
+static NSString * const SDStatusBarManagerAirplaneModeKey = @"airplane_mode";
+static NSString * const SDStatusBarManagerDisableWifiKey = @"disable_wifi";
+static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery_percent";
 
 @interface SDStatusBarManager ()
 
@@ -50,6 +54,10 @@ static NSString * const SDStatusBarManagerTimeStringKey = @"time_string";
   self.overrider.carrierName = self.carrierName;
   self.overrider.bluetoothEnabled = self.bluetoothState != SDStatusBarManagerBluetoothHidden;
   self.overrider.bluetoothConnected = self.bluetoothState == SDStatusBarManagerBluetoothVisibleConnected;
+  self.overrider.dataNetworkMode = self.dataNetworkMode;
+  self.overrider.airplaneMode = self.airplaneMode;
+  self.overrider.disableWifi = self.disableWifi;
+  self.overrider.hideBatteryPercent = self.hideBatteryPercent;
 
   [self.overrider enableOverrides];
 }
@@ -104,6 +112,74 @@ static NSString * const SDStatusBarManagerTimeStringKey = @"time_string";
 - (NSString *)timeString
 {
   return [self.userDefaults valueForKey:SDStatusBarManagerTimeStringKey];
+}
+
+- (void)setDataNetworkMode:(SDStatusBarManagerDataNetworkMode)dataNetworkMode
+{
+  if (self.dataNetworkMode == dataNetworkMode) return;
+  
+  [self.userDefaults setValue:@(dataNetworkMode) forKey:SDStatusBarManagerDataNetworkModeKey];
+  
+  if (self.usingOverrides) {
+    // Refresh the active status bar
+    [self enableOverrides];
+  }
+}
+
+- (SDStatusBarManagerDataNetworkMode)dataNetworkMode
+{
+  return [[self.userDefaults valueForKey:SDStatusBarManagerDataNetworkModeKey] integerValue];
+}
+
+- (void)setAirplaneMode:(BOOL)airplaneMode
+{
+  if (self.airplaneMode == airplaneMode) return;
+  
+  [self.userDefaults setValue:@(airplaneMode) forKey:SDStatusBarManagerAirplaneModeKey];
+  
+  if (self.usingOverrides) {
+    // Refresh the active status bar
+    [self enableOverrides];
+  }
+}
+
+- (BOOL)airplaneMode
+{
+  return [[self.userDefaults valueForKey:SDStatusBarManagerAirplaneModeKey] boolValue];
+}
+
+- (void)setDisableWifi:(BOOL)disableWifi
+{
+  if (self.disableWifi == disableWifi) return;
+  
+  [self.userDefaults setValue:@(disableWifi) forKey:SDStatusBarManagerDisableWifiKey];
+  
+  if (self.usingOverrides) {
+    // Refresh the active status bar
+    [self enableOverrides];
+  }
+}
+
+- (BOOL)disableWifi
+{
+  return [[self.userDefaults valueForKey:SDStatusBarManagerDisableWifiKey] boolValue];
+}
+
+- (void)setHideBatteryPercent:(BOOL)hideBatteryPercent
+{
+  if (self.hideBatteryPercent == hideBatteryPercent) return;
+  
+  [self.userDefaults setValue:@(hideBatteryPercent) forKey:SDStatusBarManagerHideBatteryPercentKey];
+  
+  if (self.usingOverrides) {
+    // Refresh the active status bar
+    [self enableOverrides];
+  }
+}
+
+- (BOOL)hideBatteryPercent
+{
+  return [[self.userDefaults valueForKey:SDStatusBarManagerHideBatteryPercentKey] boolValue];
 }
 
 - (NSUserDefaults *)userDefaults
@@ -164,7 +240,10 @@ static NSString * const SDStatusBarManagerTimeStringKey = @"time_string";
 {
   static dispatch_once_t predicate = 0;
   __strong static id sharedObject = nil;
-  dispatch_once(&predicate, ^{ sharedObject = [[self alloc] init]; });
+  dispatch_once(&predicate, ^{
+    sharedObject = [[self alloc] init];
+    ((SDStatusBarManager *)sharedObject).dataNetworkMode = SDStatusBarManagerDataNetworkLTE;
+  });
   return sharedObject;
 }
 

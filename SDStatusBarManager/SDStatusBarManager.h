@@ -31,12 +31,28 @@ typedef NS_ENUM(NSInteger, SDStatusBarManagerBluetoothState)
   SDStatusBarManagerBluetoothVisibleConnected
 };
 
+typedef NS_ENUM(NSInteger, SDStatusBarManagerDataNetworkMode)
+{
+  SDStatusBarManagerDataNetworkGPRS = 0,
+  SDStatusBarManagerDataNetworkE,
+  SDStatusBarManagerDataNetwork3G,
+  SDStatusBarManagerDataNetwork4G,
+  SDStatusBarManagerDataNetworkLTE,
+  SDStatusBarManagerDataNetworkWiFi,
+  SDStatusBarManagerDataNetworkPersonalHotspot,
+  SDStatusBarManagerDataNetwork1x,
+};
+
 @interface SDStatusBarManager : NSObject
 
 @property (copy, nonatomic) NSString *carrierName;
 @property (copy, nonatomic) NSString *timeString;
 @property (assign, nonatomic, readonly) BOOL usingOverrides;
 @property (assign, nonatomic) SDStatusBarManagerBluetoothState bluetoothState;
+@property (assign, nonatomic) SDStatusBarManagerDataNetworkMode dataNetworkMode;
+@property (assign, nonatomic) BOOL airplaneMode;
+@property (assign, nonatomic) BOOL disableWifi;
+@property (assign, nonatomic) BOOL hideBatteryPercent;
 
 - (void)enableOverrides;
 - (void)disableOverrides;

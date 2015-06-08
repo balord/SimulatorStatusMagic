@@ -23,14 +23,19 @@
 // --------------------------------------------------------------------------------
 
 #import <Foundation/Foundation.h>
+#import "SDStatusBarManager.h"
 
 @protocol SDStatusBarOverrider <NSObject>
 
 @property (copy, nonatomic) NSString *timeString;
-@property (copy, nonatomic) NSString* carrierName;
+@property (copy, nonatomic) NSString *carrierName;
 
 @property (assign, nonatomic) BOOL bluetoothEnabled;
 @property (assign, nonatomic) BOOL bluetoothConnected;
+@property (assign, nonatomic) SDStatusBarManagerDataNetworkMode dataNetworkMode;
+@property (assign, nonatomic) BOOL airplaneMode;
+@property (assign, nonatomic) BOOL disableWifi;
+@property (assign, nonatomic) BOOL hideBatteryPercent;
 
 - (void)enableOverrides;
 - (void)disableOverrides;

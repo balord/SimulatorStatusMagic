@@ -29,6 +29,10 @@
 @property (strong, nonatomic) IBOutlet UIButton *overrideButton;
 @property (strong, nonatomic) IBOutlet UITextField *timeStringTextField;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *bluetoothSegmentedControl;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *dataNetworkSegmentedControl;
+@property (strong, nonatomic) IBOutlet UISwitch *airplaneModeSwitch;
+@property (strong, nonatomic) IBOutlet UISwitch *wifiSwitch;
+@property (strong, nonatomic) IBOutlet UISwitch *batteryPercentageSwitch;
 @end
 
 @implementation ViewController
@@ -41,6 +45,10 @@
   [self setOverrideButtonText];
   [self setBluetoothSegementedControlSelectedSegment];
   [self setTimeStringTextFieldText];
+  [self setDataNetworkModeSegementedControlSelectedSegment];
+  [self setAirplaneModeSwitchPosition];
+  
+  [self setDataNetworkSegmentedControlEnabled];
 }
 
 #pragma mark Actions
@@ -64,6 +72,31 @@
 {
   // Note: The order of the segments should match the definition of SDStatusBarManagerBluetoothState
   [[SDStatusBarManager sharedInstance] setBluetoothState:sender.selectedSegmentIndex];
+}
+
+- (IBAction)dataNetworkStatusChanged:(UISegmentedControl *)sender
+{
+  // Note: The order of the segments should match the definition of SDStatusBarManagerDataNetworkMode
+  [[SDStatusBarManager sharedInstance] setDataNetworkMode:sender.selectedSegmentIndex];
+}
+
+- (IBAction)airplaneModeStatusChanged:(UISwitch *)sender
+{
+  [[SDStatusBarManager sharedInstance] setAirplaneMode:sender.isOn];
+  [self setDataNetworkSegmentedControlEnabled];
+}
+
+- (IBAction)wifiOnStatusChanged:(UISwitch *)sender
+{
+  BOOL disabled = !sender.isOn;
+  [[SDStatusBarManager sharedInstance] setDisableWifi:disabled];
+  [self setDataNetworkSegmentedControlEnabled];
+}
+
+- (IBAction)showBatteryPercentageStatusChanged:(UISwitch *)sender
+{
+  BOOL hidden = !sender.isOn;
+  [[SDStatusBarManager sharedInstance] setHideBatteryPercent:hidden];
 }
 
 #pragma mark Text field delegate
@@ -94,6 +127,21 @@
   self.timeStringTextField.text = [SDStatusBarManager sharedInstance].timeString;
 }
 
+- (void)setDataNetworkModeSegementedControlSelectedSegment
+{
+    self.dataNetworkSegmentedControl.selectedSegmentIndex = [SDStatusBarManager sharedInstance].dataNetworkMode;
+}
+
+- (void)setDataNetworkSegmentedControlEnabled
+{
+  self.dataNetworkSegmentedControl.enabled = ( !self.airplaneModeSwitch.isOn && !self.wifiSwitch.isOn );
+}
+    
+- (void)setAirplaneModeSwitchPosition
+{
+    self.airplaneModeSwitch.on = [SDStatusBarManager sharedInstance].airplaneMode;
+}
+ 
 #pragma mark Status bar settings
 - (BOOL)prefersStatusBarHidden
 {
