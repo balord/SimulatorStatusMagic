@@ -173,7 +173,7 @@ typedef struct {
   // Remove carrier text for airplane mode or iPhone, set it to "iPad" for the iPad
   NSString *carrierText = @"";
   if (!self.airplaneMode) {
-    NSString *carrierText = self.carrierName;
+    carrierText = self.carrierName;
     if ([carrierText length] <= 0) {
       carrierText = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"" : @"iPad";
     }
