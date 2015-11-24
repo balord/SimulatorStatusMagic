@@ -121,6 +121,10 @@ typedef struct {
 @synthesize carrierName;
 @synthesize bluetoothConnected;
 @synthesize bluetoothEnabled;
+@synthesize dataNetworkMode;
+@synthesize airplaneMode;
+@synthesize disableWifi;
+@synthesize hideBatteryPercent;
 
 - (void)enableOverrides
 {
@@ -130,27 +134,66 @@ typedef struct {
   overrides->overrideTimeString = 1;
   strcpy(overrides->values.timeString, [self.timeString cStringUsingEncoding:NSUTF8StringEncoding]);
   
-  // Enable 5 bars of mobile (iPhone only)
-  if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-    overrides->booloverrideItemIsEnabled[3] = 1;
-    overrides->values.boolitemIsEnabled[3] = 1;
-    overrides->overrideGsmSignalStrengthBars = 1;
-    overrides->values.gsmSignalStrengthBars = 5;
+  // Airplane Mode
+  if (!self.airplaneMode) {
+    // hide airplane
+    overrides->values.boolitemIsEnabled[2] = 0;
+    overrides->booloverrideItemIsEnabled[2] = 0;
+    // Enable 5 bars of mobile (iPhone only)
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+      overrides->booloverrideItemIsEnabled[3] = 1;
+      overrides->values.boolitemIsEnabled[3] = 1;
+      overrides->overrideGsmSignalStrengthBars = 1;
+      overrides->values.gsmSignalStrengthBars = 5;
+    }
+  } else {
+    // show airplane
+    overrides->values.boolitemIsEnabled[2] = 1;
+    overrides->booloverrideItemIsEnabled[2] = 1;
+    // remove any previous 5 bars override
+    overrides->booloverrideItemIsEnabled[3] = 0;
+    overrides->values.boolitemIsEnabled[3] = 0;
+    overrides->overrideGsmSignalStrengthBars = 0;
+  }
+  
+  // Data Network
+  if (self.disableWifi) {
+    overrides->booloverrideItemIsEnabled[5] = 1;
+    overrides->values.boolitemIsEnabled[5] = 1;
+    overrides->overrideDataNetworkType = 1;
+    overrides->values.dataNetworkType = self.dataNetworkMode;
+    overrides->disallowsCellularDataNetworkTypes = (self.airplaneMode ? 1 : 0);
+  } else {
+    overrides->booloverrideItemIsEnabled[5] = 0;
+    overrides->values.boolitemIsEnabled[5] = 0;
+    overrides->overrideDataNetworkType = 1;
+    overrides->values.dataNetworkType = 5; // WiFi
+    overrides->disallowsCellularDataNetworkTypes = 1;
   }
   
   // Remove carrier text for iPhone, set it to "iPad" for the iPad
-  NSString *carrierText = self.carrierName;
-  if ([carrierText length] <= 0) {
-    carrierText = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"" : @"iPad";
+  NSString *carrierText = @"";
+  if (!self.airplaneMode) {
+    carrierText = self.carrierName;
+    if ([carrierText length] <= 0) {
+      carrierText = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"" : @"iPad";
+    }
   }
   overrides->overrideServiceString = 1;
   strcpy(overrides->values.serviceString, [carrierText cStringUsingEncoding:NSUTF8StringEncoding]);
   
   // Battery
-  overrides->booloverrideItemIsEnabled[8] = 1;
-  overrides->values.boolitemIsEnabled[8] = 1;
-  overrides->overrideBatteryDetailString = 1;
-  strcpy(overrides->values.batteryDetailString, [@"100%" cStringUsingEncoding:NSUTF8StringEncoding]);
+  if ( !self.hideBatteryPercent ) {
+    overrides->booloverrideItemIsEnabled[8] = 1;
+    overrides->values.boolitemIsEnabled[8] = 1;
+    overrides->overrideBatteryDetailString = 1;
+    strcpy(overrides->values.batteryDetailString, [@"100%" cStringUsingEncoding:NSUTF8StringEncoding]);
+  } else {
+    overrides->booloverrideItemIsEnabled[8] = 1;
+    overrides->values.boolitemIsEnabled[8] = 0;
+    overrides->overrideBatteryDetailString = 1;
+    strcpy(overrides->values.batteryDetailString, [@"" cStringUsingEncoding:NSUTF8StringEncoding]);
+  }
   
   // Bluetooth
   overrides->booloverrideItemIsEnabled[11] = self.bluetoothEnabled;
