@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -15,21 +18,20 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Omy-wd-t1z">
-                                <rect key="frame" x="38" y="60" width="244" height="32"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bluetooth Icon" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1W5-6m-qnr">
+                                <rect key="frame" x="132.5" y="28" width="111" height="20"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <state key="normal" title="Apply Clean Status Bar Overrides">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="overrideButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="u6d-d9-0ab"/>
-                                </connections>
-                            </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VEX-a6-wUU">
-                                <rect key="frame" x="38" y="283" width="242.5" height="29"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="VEX-a6-wUU">
+                                <rect key="frame" x="37.5" y="56" width="300" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="ySp-lM-X7h"/>
+                                </constraints>
                                 <segments>
                                     <segment title="Hidden"/>
                                     <segment title="Dimmed"/>
@@ -39,169 +41,57 @@
                                     <action selector="bluetoothStatusChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="67a-Ux-qau"/>
                                 </connections>
                             </segmentedControl>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Data Network" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HRT-0l-UBn">
-                                <rect key="frame" x="110" y="341" width="99.5" height="20"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="JFi-Ac-1md"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2u9-af-i7l">
-                                <rect key="frame" x="16" y="369" width="288" height="29"/>
-                                <segments>
-                                    <segment title="GPRS"/>
-                                    <segment title="E"/>
-                                    <segment title="3G"/>
-                                    <segment title="4G"/>
-                                    <segment title="LTE"/>
-                                    <segment title="WiFi"/>
-                                    <segment title="Hot Spot"/>
-                                    <segment title="1x"/>
-                                </segments>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="9:41 AM" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="QuK-wD-2d0">
+                                <rect key="frame" x="37.5" y="143" width="300" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
                                 <connections>
-                                    <action selector="dataNetworkStatusChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="ib3-jd-RMh"/>
+                                    <action selector="timeStringTextFieldEditingChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="bps-rh-Uc2"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="nMZ-yv-GyM"/>
                                 </connections>
-                            </segmentedControl>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Airplane Mode" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BB3-ku-Yiy">
-                                <rect key="frame" x="38" y="128" width="185.5" height="20"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="GNz-n5-8Hb"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CcU-Mb-bVk">
+                                <rect key="frame" x="168.5" y="114" width="38" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WiFi" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jkl-4q-0tU">
-                                <rect key="frame" x="38" y="167" width="185.5" height="20"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="LBG-bL-yfL"/>
-                                </constraints>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Omy-wd-t1z">
+                                <rect key="frame" x="60" y="195" width="255" height="33"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1zb-OU-qnB">
-                                <rect key="frame" x="231" y="122" width="51" height="31"/>
+                                <state key="normal" title="Apply Clean Status Bar Overrides">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
-                                    <action selector="airplaneModeStatusChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="v3I-Bu-EFC"/>
+                                    <action selector="overrideButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="u6d-d9-0ab"/>
                                 </connections>
-                            </switch>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6H3-Ss-YDy">
-                                <rect key="frame" x="231" y="161" width="51" height="31"/>
-                                <connections>
-                                    <action selector="wifiOnStatusChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="3LA-d5-HJX"/>
-                                </connections>
-                            </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Battery Percentage" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B28-bH-z0y">
-                                <rect key="frame" x="38" y="206" width="185.5" height="19.5"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rdt-me-E5Y">
-                                <rect key="frame" x="231" y="200" width="51" height="31"/>
-                                <connections>
-                                    <action selector="showBatteryPercentageStatusChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="HpT-zw-BZn"/>
-                                </connections>
-                            </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bluetooth Icon" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1W5-6m-qnr">
-                                <rect key="frame" x="106" y="255" width="106.5" height="20"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="Sz8-OU-5ib"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="centerX" secondItem="2u9-af-i7l" secondAttribute="centerX" id="3gz-aQ-jvI"/>
-                            <constraint firstItem="2u9-af-i7l" firstAttribute="leading" secondItem="VEX-a6-wUU" secondAttribute="leading" id="3iO-A0-I3v"/>
-                            <constraint firstItem="1W5-6m-qnr" firstAttribute="leading" secondItem="VEX-a6-wUU" secondAttribute="leading" id="4AI-Rb-Hi0"/>
-                            <constraint firstItem="6H3-Ss-YDy" firstAttribute="leading" secondItem="Jkl-4q-0tU" secondAttribute="trailing" constant="8" symbolic="YES" id="5vb-jI-p8d"/>
-                            <constraint firstAttribute="centerX" secondItem="HRT-0l-UBn" secondAttribute="centerX" id="7gy-yl-Uoi"/>
-                            <constraint firstItem="6H3-Ss-YDy" firstAttribute="top" secondItem="1zb-OU-qnB" secondAttribute="bottom" constant="8" symbolic="YES" id="8ua-NA-ViI"/>
-                            <constraint firstItem="Jkl-4q-0tU" firstAttribute="leading" secondItem="BB3-ku-Yiy" secondAttribute="leading" id="AFA-z6-Bvc"/>
-                            <constraint firstItem="1W5-6m-qnr" firstAttribute="trailing" secondItem="HRT-0l-UBn" secondAttribute="trailing" id="FKG-u8-UfM"/>
-                            <constraint firstItem="1W5-6m-qnr" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="FLF-gU-DnR"/>
-                            <constraint firstItem="1zb-OU-qnB" firstAttribute="top" secondItem="Omy-wd-t1z" secondAttribute="bottom" priority="250" constant="30" id="Jp3-sF-s29"/>
-                            <constraint firstItem="rdt-me-E5Y" firstAttribute="top" secondItem="6H3-Ss-YDy" secondAttribute="bottom" constant="8" symbolic="YES" id="McM-lP-C3A"/>
-                            <constraint firstItem="VEX-a6-wUU" firstAttribute="centerX" secondItem="1W5-6m-qnr" secondAttribute="centerX" id="Pua-Ea-ds4"/>
-                            <constraint firstItem="Jkl-4q-0tU" firstAttribute="top" secondItem="BB3-ku-Yiy" secondAttribute="bottom" constant="19" id="QC3-xS-kvO"/>
-                            <constraint firstItem="2u9-af-i7l" firstAttribute="top" secondItem="HRT-0l-UBn" secondAttribute="bottom" constant="8" symbolic="YES" id="Rzg-GA-G5C"/>
-                            <constraint firstItem="HRT-0l-UBn" firstAttribute="top" secondItem="VEX-a6-wUU" secondAttribute="bottom" priority="250" constant="30" id="Ssm-jL-Ocv"/>
-                            <constraint firstItem="Jkl-4q-0tU" firstAttribute="leading" secondItem="BB3-ku-Yiy" secondAttribute="leading" id="Suq-V5-Z3A"/>
-                            <constraint firstItem="2u9-af-i7l" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="TbP-vU-OLE"/>
-                            <constraint firstItem="rdt-me-E5Y" firstAttribute="trailing" secondItem="1zb-OU-qnB" secondAttribute="trailing" id="UG5-Qi-qtL"/>
-                            <constraint firstItem="VEX-a6-wUU" firstAttribute="top" secondItem="1W5-6m-qnr" secondAttribute="bottom" constant="8" symbolic="YES" id="UdG-uG-lR7"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="2u9-af-i7l" secondAttribute="trailing" id="VMW-Mq-aNQ"/>
-                            <constraint firstItem="6H3-Ss-YDy" firstAttribute="leading" secondItem="1zb-OU-qnB" secondAttribute="leading" id="VWH-Ji-qXy"/>
-                            <constraint firstAttribute="centerX" secondItem="VEX-a6-wUU" secondAttribute="centerX" id="VWo-nO-eze"/>
-                            <constraint firstItem="rdt-me-E5Y" firstAttribute="trailing" secondItem="VEX-a6-wUU" secondAttribute="trailing" id="bQf-iR-v3B"/>
-                            <constraint firstItem="HRT-0l-UBn" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="bTx-1F-shK"/>
-                            <constraint firstItem="Jkl-4q-0tU" firstAttribute="leading" secondItem="VEX-a6-wUU" secondAttribute="leading" id="buc-Z0-q5c"/>
-                            <constraint firstItem="1W5-6m-qnr" firstAttribute="top" secondItem="B28-bH-z0y" secondAttribute="bottom" priority="250" constant="30" id="eh5-ei-VBp"/>
-                            <constraint firstItem="1W5-6m-qnr" firstAttribute="top" secondItem="rdt-me-E5Y" secondAttribute="bottom" constant="27" id="fWx-eC-dXo"/>
-                            <constraint firstItem="rdt-me-E5Y" firstAttribute="leading" secondItem="B28-bH-z0y" secondAttribute="trailing" constant="8" symbolic="YES" id="fZF-iL-OdY"/>
-                            <constraint firstItem="B28-bH-z0y" firstAttribute="top" secondItem="Jkl-4q-0tU" secondAttribute="bottom" constant="19" id="gPn-mr-FEn"/>
-                            <constraint firstItem="Omy-wd-t1z" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" priority="250" constant="40" id="gSa-0U-40z"/>
-                            <constraint firstItem="B28-bH-z0y" firstAttribute="leading" secondItem="VEX-a6-wUU" secondAttribute="leading" id="gZu-P6-Gcz"/>
-                            <constraint firstItem="VEX-a6-wUU" firstAttribute="trailing" secondItem="rdt-me-E5Y" secondAttribute="trailing" id="gzw-Cc-2PL"/>
-                            <constraint firstItem="1W5-6m-qnr" firstAttribute="leading" secondItem="Omy-wd-t1z" secondAttribute="leading" id="kDp-q6-2Fm"/>
-                            <constraint firstItem="2u9-af-i7l" firstAttribute="trailing" secondItem="HRT-0l-UBn" secondAttribute="trailing" id="kF0-WT-Etg"/>
-                            <constraint firstAttribute="centerX" secondItem="1W5-6m-qnr" secondAttribute="centerX" id="m8W-MP-6oD"/>
-                            <constraint firstItem="1W5-6m-qnr" firstAttribute="trailing" secondItem="VEX-a6-wUU" secondAttribute="trailing" id="mB7-tH-qQs"/>
-                            <constraint firstItem="1zb-OU-qnB" firstAttribute="leading" secondItem="BB3-ku-Yiy" secondAttribute="trailing" constant="8" symbolic="YES" id="n6x-01-5ik"/>
-                            <constraint firstItem="Omy-wd-t1z" firstAttribute="trailing" secondItem="1W5-6m-qnr" secondAttribute="trailing" id="nmL-2W-Z2e"/>
-                            <constraint firstItem="6H3-Ss-YDy" firstAttribute="leading" secondItem="rdt-me-E5Y" secondAttribute="leading" id="okx-2Y-J6n"/>
-                            <constraint firstItem="B28-bH-z0y" firstAttribute="leading" secondItem="Jkl-4q-0tU" secondAttribute="leading" id="p9t-ur-EJX"/>
-                            <constraint firstAttribute="centerX" secondItem="Omy-wd-t1z" secondAttribute="centerX" id="pp7-Yz-5Dq"/>
-                            <constraint firstItem="rdt-me-E5Y" firstAttribute="trailing" secondItem="6H3-Ss-YDy" secondAttribute="trailing" id="qzz-QT-Oyg"/>
-                            <constraint firstItem="HRT-0l-UBn" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="sjU-GP-i14"/>
-                            <constraint firstItem="1W5-6m-qnr" firstAttribute="leading" secondItem="HRT-0l-UBn" secondAttribute="leading" id="uIo-ip-iJR"/>
-                            <constraint firstItem="Jkl-4q-0tU" firstAttribute="leading" secondItem="B28-bH-z0y" secondAttribute="leading" id="v5k-gr-igX"/>
-                            <constraint firstItem="BB3-ku-Yiy" firstAttribute="top" secondItem="Omy-wd-t1z" secondAttribute="bottom" priority="250" constant="36" id="wR9-Gx-K1x"/>
-                            <constraint firstItem="HRT-0l-UBn" firstAttribute="leading" secondItem="2u9-af-i7l" secondAttribute="leading" id="zIx-r6-3eX"/>
-                            <constraint firstAttribute="centerX" secondItem="Omy-wd-t1z" secondAttribute="centerX" id="zlF-U1-Boj"/>
+                            <constraint firstItem="CcU-Mb-bVk" firstAttribute="top" secondItem="VEX-a6-wUU" secondAttribute="bottom" constant="30" id="06E-jA-9bB"/>
+                            <constraint firstItem="VEX-a6-wUU" firstAttribute="top" secondItem="1W5-6m-qnr" secondAttribute="bottom" constant="8.5" id="6yr-PR-2Mv"/>
+                            <constraint firstAttribute="centerX" secondItem="VEX-a6-wUU" secondAttribute="centerX" id="7k2-tb-Tvg"/>
+                            <constraint firstItem="VEX-a6-wUU" firstAttribute="trailing" secondItem="QuK-wD-2d0" secondAttribute="trailing" id="CH2-Pm-5xn"/>
+                            <constraint firstItem="VEX-a6-wUU" firstAttribute="leading" secondItem="QuK-wD-2d0" secondAttribute="leading" id="DLs-vg-QzH"/>
+                            <constraint firstItem="QuK-wD-2d0" firstAttribute="top" secondItem="CcU-Mb-bVk" secondAttribute="bottom" constant="8" id="GPW-yh-BfV"/>
+                            <constraint firstItem="VEX-a6-wUU" firstAttribute="centerX" secondItem="QuK-wD-2d0" secondAttribute="centerX" id="Hji-Sf-pad"/>
+                            <constraint firstAttribute="centerX" secondItem="1W5-6m-qnr" secondAttribute="centerX" constant="-0.5" id="Prz-cE-8oA"/>
+                            <constraint firstItem="1W5-6m-qnr" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="Vqa-Qz-Ja3"/>
+                            <constraint firstItem="Omy-wd-t1z" firstAttribute="top" secondItem="QuK-wD-2d0" secondAttribute="bottom" constant="22" id="YAw-nZ-4Ni"/>
+                            <constraint firstAttribute="centerX" secondItem="CcU-Mb-bVk" secondAttribute="centerX" id="qxc-YV-wRm"/>
+                            <constraint firstAttribute="centerX" secondItem="Omy-wd-t1z" secondAttribute="centerX" id="xaa-SO-MPw"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="nmL-2W-Z2e"/>
-                                <exclude reference="zlF-U1-Boj"/>
-                                <exclude reference="gZu-P6-Gcz"/>
-                                <exclude reference="4AI-Rb-Hi0"/>
-                                <exclude reference="FKG-u8-UfM"/>
-                                <exclude reference="FLF-gU-DnR"/>
-                                <exclude reference="fWx-eC-dXo"/>
-                                <exclude reference="kDp-q6-2Fm"/>
-                                <exclude reference="mB7-tH-qQs"/>
-                                <exclude reference="uIo-ip-iJR"/>
-                                <exclude reference="gzw-Cc-2PL"/>
-                                <exclude reference="3iO-A0-I3v"/>
-                                <exclude reference="kF0-WT-Etg"/>
-                                <exclude reference="bTx-1F-shK"/>
-                                <exclude reference="sjU-GP-i14"/>
-                                <exclude reference="zIx-r6-3eX"/>
-                            </mask>
-                        </variation>
                     </view>
-                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="airplaneModeSwitch" destination="1zb-OU-qnB" id="72m-uB-84D"/>
-                        <outlet property="batteryPercentageSwitch" destination="rdt-me-E5Y" id="dm7-bq-hGh"/>
                         <outlet property="bluetoothSegmentedControl" destination="VEX-a6-wUU" id="L7z-KL-JJm"/>
-                        <outlet property="dataNetworkSegmentedControl" destination="2u9-af-i7l" id="WO6-lQ-7BA"/>
                         <outlet property="overrideButton" destination="Omy-wd-t1z" id="OkF-TC-Syr"/>
-                        <outlet property="wifiSwitch" destination="6H3-Ss-YDy" id="0RM-PC-q8p"/>
+                        <outlet property="timeStringTextField" destination="QuK-wD-2d0" id="65v-sA-1Yd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-77" y="-8"/>
+            <point key="canvasLocation" x="49" y="147"/>
         </scene>
     </scenes>
 </document>

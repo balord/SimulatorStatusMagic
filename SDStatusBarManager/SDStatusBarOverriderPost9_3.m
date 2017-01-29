@@ -172,7 +172,7 @@ typedef struct {
 @synthesize dataNetworkMode;
 @synthesize airplaneMode;
 @synthesize disableWifi;
-@synthesize hideBatteryPercent;
+@synthesize batteryDetailEnabled;
 
 - (void)enableOverrides
 {
@@ -231,7 +231,7 @@ typedef struct {
   strcpy(overrides->values.serviceString, [carrierText cStringUsingEncoding:NSUTF8StringEncoding]);
 
   // Battery
-  if ( !self.hideBatteryPercent ) {
+  if ( self.batteryDetailEnabled ) {
     overrides->booloverrideItemIsEnabled[ItemIsEnabledBatteryDetailString] = 1;
     overrides->values.boolitemIsEnabled[ItemIsEnabledBatteryDetailString] = 1;
     overrides->overrideBatteryDetailString = 1;
@@ -253,6 +253,12 @@ typedef struct {
   
   // Actually update the status bar
   [UIStatusBarServer postStatusBarOverrideData:overrides];
+    
+  // Remove the @" " used to trick the battery percentage into not showing, if used
+  if (!self.batteryDetailEnabled) {
+    strcpy(overrides->values.batteryDetailString, [@"" cStringUsingEncoding:NSUTF8StringEncoding]);
+    [UIStatusBarServer postStatusBarOverrideData:overrides];
+  }
   
   // Lock in the changes, reset simulator will remove this
   [UIStatusBarServer permanentizeStatusBarOverrideData];

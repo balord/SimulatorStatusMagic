@@ -58,7 +58,7 @@
   if ([environment[@"SIMULATOR_STATUS_MAGIC_OVERRIDES"] isEqualToString:@"DISABLE"]) {
     [[SDStatusBarManager sharedInstance] disableOverrides];
     [self setOverrideButtonText];
-  }}
+  }
 }
 
 #pragma mark Actions
@@ -105,8 +105,8 @@
 
 - (IBAction)showBatteryPercentageStatusChanged:(UISwitch *)sender
 {
-  BOOL hidden = !sender.isOn;
-  [[SDStatusBarManager sharedInstance] setHideBatteryPercent:hidden];
+  BOOL enabled = sender.isOn;
+  [[SDStatusBarManager sharedInstance] setBatteryDetailEnabled:enabled];
 }
 
 #pragma mark Text field delegate

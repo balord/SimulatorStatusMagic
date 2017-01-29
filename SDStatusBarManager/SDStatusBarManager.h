@@ -52,7 +52,7 @@ typedef NS_ENUM(NSInteger, SDStatusBarManagerDataNetworkMode)
 @property (assign, nonatomic) SDStatusBarManagerDataNetworkMode dataNetworkMode;
 @property (assign, nonatomic) BOOL airplaneMode;
 @property (assign, nonatomic) BOOL disableWifi;
-@property (assign, nonatomic) BOOL hideBatteryPercent;
+@property (assign, nonatomic) BOOL batteryDetailEnabled;
 
 - (void)enableOverrides;
 - (void)disableOverrides;

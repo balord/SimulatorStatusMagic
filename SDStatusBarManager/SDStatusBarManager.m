@@ -36,7 +36,7 @@ static NSString * const SDStatusBarManagerTimeStringKey = @"time_string";
 static NSString * const SDStatusBarManagerDataNetworkModeKey = @"data_network_mode";
 static NSString * const SDStatusBarManagerAirplaneModeKey = @"airplane_mode";
 static NSString * const SDStatusBarManagerDisableWifiKey = @"disable_wifi";
-static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery_percent";
+static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_detail_enabled";
 
 @interface SDStatusBarManager ()
 
@@ -46,6 +46,17 @@ static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery
 @end
 
 @implementation SDStatusBarManager
+
+- (instancetype)init
+{
+  self = [super init];
+  if (self) {
+    // Set any defaults for the status bar
+    self.dataNetworkMode = SDStatusBarManagerDataNetworkLTE;
+	self.batteryDetailEnabled = YES;
+  }
+  return self;
+}
 
 - (void)enableOverrides
 {
@@ -58,7 +69,7 @@ static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery
   self.overrider.dataNetworkMode = self.dataNetworkMode;
   self.overrider.airplaneMode = self.airplaneMode;
   self.overrider.disableWifi = self.disableWifi;
-  self.overrider.hideBatteryPercent = self.hideBatteryPercent;
+  self.overrider.batteryDetailEnabled = self.batteryDetailEnabled;
 
   [self.overrider enableOverrides];
 }
@@ -88,7 +99,6 @@ static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery
   [self.userDefaults setValue:@(bluetoothState) forKey:SDStatusBarManagerBluetoothStateKey];
 
   if (self.usingOverrides) {
-    // Refresh the active status bar
     [self enableOverrides];
   }
 }
@@ -105,7 +115,6 @@ static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery
   [self.userDefaults setObject:timeString forKey:SDStatusBarManagerTimeStringKey];
 
   if (self.usingOverrides) {
-    // Refresh the active status bar
     [self enableOverrides];
   }
 }
@@ -122,7 +131,6 @@ static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery
   [self.userDefaults setValue:@(dataNetworkMode) forKey:SDStatusBarManagerDataNetworkModeKey];
   
   if (self.usingOverrides) {
-    // Refresh the active status bar
     [self enableOverrides];
   }
 }
@@ -139,7 +147,6 @@ static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery
   [self.userDefaults setValue:@(airplaneMode) forKey:SDStatusBarManagerAirplaneModeKey];
   
   if (self.usingOverrides) {
-    // Refresh the active status bar
     [self enableOverrides];
   }
 }
@@ -156,7 +163,6 @@ static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery
   [self.userDefaults setValue:@(disableWifi) forKey:SDStatusBarManagerDisableWifiKey];
   
   if (self.usingOverrides) {
-    // Refresh the active status bar
     [self enableOverrides];
   }
 }
@@ -166,21 +172,20 @@ static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery
   return [[self.userDefaults valueForKey:SDStatusBarManagerDisableWifiKey] boolValue];
 }
 
-- (void)setHideBatteryPercent:(BOOL)hideBatteryPercent
+- (void)setBatteryDetailEnabled:(BOOL)batteryDetailEnabled
 {
-  if (self.hideBatteryPercent == hideBatteryPercent) return;
+  if (self.batteryDetailEnabled == batteryDetailEnabled) return;
   
-  [self.userDefaults setValue:@(hideBatteryPercent) forKey:SDStatusBarManagerHideBatteryPercentKey];
+  [self.userDefaults setValue:@(batteryDetailEnabled) forKey:SDStatusBarManagerBatteryDetailEnabledKey];
   
   if (self.usingOverrides) {
-    // Refresh the active status bar
     [self enableOverrides];
   }
 }
 
-- (BOOL)hideBatteryPercent
+- (BOOL)batteryDetailEnabled
 {
-  return [[self.userDefaults valueForKey:SDStatusBarManagerHideBatteryPercentKey] boolValue];
+  return [[self.userDefaults valueForKey:SDStatusBarManagerBatteryDetailEnabledKey] boolValue];
 }
 
 - (NSUserDefaults *)userDefaults
@@ -241,10 +246,7 @@ static NSString * const SDStatusBarManagerHideBatteryPercentKey = @"hide_battery
 {
   static dispatch_once_t predicate = 0;
   __strong static id sharedObject = nil;
-  dispatch_once(&predicate, ^{
-    sharedObject = [[self alloc] init];
-    ((SDStatusBarManager *)sharedObject).dataNetworkMode = SDStatusBarManagerDataNetworkLTE;
-  });
+  dispatch_once(&predicate, ^{ sharedObject = [[self alloc] init]; });
   return sharedObject;
 }
 
