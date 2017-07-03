@@ -10,40 +10,39 @@
 #import "SDStatusBarOverriderPost10_3.h"
 
 typedef NS_ENUM(int, StatusBarItem10_0) {
-  // 0
   DoNotDisturb = 1,
-  // 2
+  AirplaneModeIcon = 2,
   SignalStrengthBars = 3,
   // 4
   // 5
   // 6
-  // 7
+  // 7 - clock align right
   // 8
   BatteryDetail = 9,
   // 10
-  // 11
+  // 11 - bluetooth battery detail
   Bluetooth = 12,
-  // 13
+  // 13 - TTY
   Alarms = 14,
   // 15
-  // 16
-  // 17
+  // 16 - carrier
+  // 17 - location services
   RotationLock = 18,
   // 19
-  // 20
-  // 21
+  // 20 - airplay
+  // 21 - microphone
   // 22
-  // 23
-  // 24
-  // 25
-  // 26
+  // 23 - school desk?
+  // 24 - VPN
+  // 25 - call forwarding
+  // 26 - network activity
   // 27
   // 28
   // 29
   // 30
-  // 31
-  // 32
-  // 33
+  // 31 - device locked
+  // 32 - water warning
+  // 33 - headphones?
   // 34
 };
 
@@ -150,6 +149,9 @@ typedef struct {
 @synthesize carrierName;
 @synthesize bluetoothConnected;
 @synthesize bluetoothEnabled;
+@synthesize dataNetworkMode;
+@synthesize airplaneMode;
+@synthesize disableWifi;
 @synthesize batteryDetailEnabled;
 
 - (void)enableOverrides {
@@ -159,32 +161,59 @@ typedef struct {
   strcpy(overrides->values.timeString, [self.timeString cStringUsingEncoding:NSUTF8StringEncoding]);
   overrides->overrideTimeString = 1;
   
-  // Enable 5 bars of mobile (iPhone only)
-  if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-    overrides->overrideItemIsEnabled[SignalStrengthBars] = 1;
-    overrides->values.itemIsEnabled[SignalStrengthBars] = 1;
-    overrides->overrideGsmSignalStrengthBars = 1;
-    overrides->values.gsmSignalStrengthBars = 5;
+  // Airplane Mode
+  if (!self.airplaneMode) {
+    // hide airplane
+    overrides->values.itemIsEnabled[AirplaneModeIcon] = 0;
+    overrides->overrideItemIsEnabled[AirplaneModeIcon] = 0;
+    // Enable 5 bars of mobile (iPhone only)
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+      overrides->overrideItemIsEnabled[SignalStrengthBars] = 1;
+      overrides->values.itemIsEnabled[SignalStrengthBars] = 1;
+      overrides->overrideGsmSignalStrengthBars = 1;
+      overrides->values.gsmSignalStrengthBars = 5;
+    }
+  } else {
+    // show airplane
+    overrides->values.itemIsEnabled[AirplaneModeIcon] = 1;
+    overrides->overrideItemIsEnabled[AirplaneModeIcon] = 1;
+    // remove any previous 5 bars override
+    overrides->overrideItemIsEnabled[SignalStrengthBars] = 0;
+    overrides->values.itemIsEnabled[SignalStrengthBars] = 0;
+    overrides->overrideGsmSignalStrengthBars = 0;
+  }
+  
+  // Data Network
+  if (self.disableWifi) {
+    overrides->overrideDataNetworkType = 1;
+    overrides->values.dataNetworkType = self.dataNetworkMode;
+    overrides->disallowsCellularDataNetworkTypes = (self.airplaneMode ? 1 : 0);
+  } else {
+    overrides->overrideDataNetworkType = 1;
+    overrides->values.dataNetworkType = 5; // WiFi
+    overrides->disallowsCellularDataNetworkTypes = 1;
   }
   
   // Remove carrier text for iPhone, set it to "iPad" for the iPad
   overrides->overrideServiceString = 1;
-  NSString *carrierText = self.carrierName;
-  if ([carrierText length] <= 0) {
-    carrierText = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"" : @"iPad";
+  NSString *carrierText = @""; // show empty carrier text if in Airplane Mode
+  if (!self.airplaneMode) {
+    carrierText = self.carrierName;
+    if ([carrierText length] <= 0) {
+      carrierText = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? @"" : @"iPad";
+    }
   }
   strcpy(overrides->values.serviceString, [carrierText cStringUsingEncoding:NSUTF8StringEncoding]);
   
   // Battery: 100% and unplugged
   overrides->overrideItemIsEnabled[BatteryDetail] = YES;
-  overrides->values.itemIsEnabled[BatteryDetail] = YES;
+  overrides->values.itemIsEnabled[BatteryDetail] = self.batteryDetailEnabled;
   overrides->overrideBatteryCapacity = YES;
   overrides->values.batteryCapacity = 100;
   overrides->overrideBatteryState = YES;
   overrides->values.batteryState = BatteryStateUnplugged;
   overrides->overrideBatteryDetailString = YES;
-  NSString *batteryDetailString = self.batteryDetailEnabled ? [NSString stringWithFormat:@"%@%%", @(overrides->values.batteryCapacity)] : @" ";
-// Setting this to an empty string will not work, it needs to be a @" "
+  NSString *batteryDetailString = self.batteryDetailEnabled ? [NSString stringWithFormat:@"%@%%", @(overrides->values.batteryCapacity)] : @" "; // Setting this to an empty string will not work, it needs to be a @" "
   strcpy(overrides->values.batteryDetailString, [batteryDetailString cStringUsingEncoding:NSUTF8StringEncoding]);
   
   // Bluetooth
