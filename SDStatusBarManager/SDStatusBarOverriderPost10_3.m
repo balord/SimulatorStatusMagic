@@ -149,10 +149,10 @@ typedef struct {
 @synthesize carrierName;
 @synthesize bluetoothConnected;
 @synthesize bluetoothEnabled;
-@synthesize dataNetworkMode;
 @synthesize airplaneMode;
 @synthesize disableWifi;
 @synthesize batteryDetailEnabled;
+@synthesize networkType;
 
 - (void)enableOverrides {
   StatusBarOverrideData *overrides = [UIStatusBarServer getStatusBarOverrideData];
@@ -186,11 +186,11 @@ typedef struct {
   // Data Network
   if (self.disableWifi) {
     overrides->overrideDataNetworkType = 1;
-    overrides->values.dataNetworkType = self.dataNetworkMode;
+    overrides->values.dataNetworkType = self.networkType;
     overrides->disallowsCellularDataNetworkTypes = (self.airplaneMode ? 1 : 0);
   } else {
     overrides->overrideDataNetworkType = 1;
-    overrides->values.dataNetworkType = 5; // WiFi
+    overrides->values.dataNetworkType = SDStatusBarManagerNetworkTypeWiFi;
     overrides->disallowsCellularDataNetworkTypes = 1;
   }
   
@@ -248,6 +248,7 @@ typedef struct {
   // Remove specific overrides (separate flags)
   overrides->overrideTimeString = 0;
   overrides->overrideGsmSignalStrengthBars = 0;
+  overrides->overrideDataNetworkType = 0;
   overrides->overrideBatteryCapacity = 0;
   overrides->overrideBatteryState = 0;
   overrides->overrideBatteryDetailString = 0;

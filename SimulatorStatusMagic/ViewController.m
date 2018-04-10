@@ -28,8 +28,9 @@
 @interface ViewController () 
 @property (strong, nonatomic) IBOutlet UIButton *overrideButton;
 @property (strong, nonatomic) IBOutlet UITextField *timeStringTextField;
+@property (strong, nonatomic) IBOutlet UITextField *carrierNameTextField;
 @property (strong, nonatomic) IBOutlet UISegmentedControl *bluetoothSegmentedControl;
-@property (strong, nonatomic) IBOutlet UISegmentedControl *dataNetworkSegmentedControl;
+@property (strong, nonatomic) IBOutlet UISegmentedControl *networkSegmentedControl;
 @property (strong, nonatomic) IBOutlet UISwitch *airplaneModeSwitch;
 @property (strong, nonatomic) IBOutlet UISwitch *wifiSwitch;
 @property (strong, nonatomic) IBOutlet UISwitch *batteryPercentageSwitch;
@@ -44,11 +45,12 @@
 
   [self setOverrideButtonText];
   [self setBluetoothSegementedControlSelectedSegment];
+  [self setNetworkSegementedControlSelectedSegment];
+  [self setCarrierNameTextFieldText];
   [self setTimeStringTextFieldText];
-  [self setDataNetworkModeSegementedControlSelectedSegment];
   [self setAirplaneModeSwitchPosition];
   
-  [self setDataNetworkSegmentedControlEnabled];
+  [self setNetworkSegmentedControlEnabled];
   
   NSDictionary *environment = [[NSProcessInfo processInfo] environment];
   if ([environment[@"SIMULATOR_STATUS_MAGIC_OVERRIDES"] isEqualToString:@"ENABLE"]) {
@@ -73,6 +75,11 @@
   }
 }
 
+- (IBAction)carrierNameTextFieldEditingChanged:(UITextField *)textField
+{
+  [SDStatusBarManager sharedInstance].carrierName = textField.text;
+}
+
 - (IBAction)timeStringTextFieldEditingChanged:(UITextField *)textField
 {
   [SDStatusBarManager sharedInstance].timeString = textField.text;
@@ -84,23 +91,23 @@
   [[SDStatusBarManager sharedInstance] setBluetoothState:sender.selectedSegmentIndex];
 }
 
-- (IBAction)dataNetworkStatusChanged:(UISegmentedControl *)sender
+- (IBAction)networkTypeChanged:(UISegmentedControl *)sender
 {
-  // Note: The order of the segments should match the definition of SDStatusBarManagerDataNetworkMode
-  [[SDStatusBarManager sharedInstance] setDataNetworkMode:sender.selectedSegmentIndex];
+  // Note: The order of the segments should match the definition of SDStatusBarManagerNetworkType
+  [[SDStatusBarManager sharedInstance] setNetworkType:sender.selectedSegmentIndex];
 }
 
 - (IBAction)airplaneModeStatusChanged:(UISwitch *)sender
 {
   [[SDStatusBarManager sharedInstance] setAirplaneMode:sender.isOn];
-  [self setDataNetworkSegmentedControlEnabled];
+  [self setNetworkSegmentedControlEnabled];
 }
 
 - (IBAction)wifiOnStatusChanged:(UISwitch *)sender
 {
   BOOL disabled = !sender.isOn;
   [[SDStatusBarManager sharedInstance] setDisableWifi:disabled];
-  [self setDataNetworkSegmentedControlEnabled];
+  [self setNetworkSegmentedControlEnabled];
 }
 
 - (IBAction)showBatteryPercentageStatusChanged:(UISwitch *)sender
@@ -132,19 +139,26 @@
   self.bluetoothSegmentedControl.selectedSegmentIndex = [SDStatusBarManager sharedInstance].bluetoothState;
 }
 
+- (void)setNetworkSegementedControlSelectedSegment
+{
+  // Note: The order of the segments should match the definition of SDStatusBarManagerNetworkType
+  self.networkSegmentedControl.selectedSegmentIndex = [SDStatusBarManager sharedInstance].networkType;
+}
+
+- (void)setCarrierNameTextFieldText
+{
+  self.carrierNameTextField.placeholder = NSLocalizedString(@"Carrier", @"Carrier");
+  self.carrierNameTextField.text = [SDStatusBarManager sharedInstance].carrierName;
+}
+
 - (void)setTimeStringTextFieldText
 {
   self.timeStringTextField.text = [SDStatusBarManager sharedInstance].timeString;
 }
 
-- (void)setDataNetworkModeSegementedControlSelectedSegment
+- (void)setNetworkSegmentedControlEnabled
 {
-    self.dataNetworkSegmentedControl.selectedSegmentIndex = [SDStatusBarManager sharedInstance].dataNetworkMode;
-}
-
-- (void)setDataNetworkSegmentedControlEnabled
-{
-  self.dataNetworkSegmentedControl.enabled = ( !self.airplaneModeSwitch.isOn && !self.wifiSwitch.isOn );
+  self.networkSegmentedControl.enabled = (!self.airplaneModeSwitch.isOn && !self.wifiSwitch.isOn);
 }
     
 - (void)setAirplaneModeSwitchPosition

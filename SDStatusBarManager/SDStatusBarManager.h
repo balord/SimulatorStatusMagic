@@ -31,16 +31,16 @@ typedef NS_ENUM(NSInteger, SDStatusBarManagerBluetoothState)
   SDStatusBarManagerBluetoothVisibleConnected
 };
 
-typedef NS_ENUM(NSInteger, SDStatusBarManagerDataNetworkMode)
+typedef NS_ENUM(NSInteger, SDStatusBarManagerNetworkType)
 {
-  SDStatusBarManagerDataNetworkGPRS = 0,
-  SDStatusBarManagerDataNetworkE,
-  SDStatusBarManagerDataNetwork3G,
-  SDStatusBarManagerDataNetwork4G,
-  SDStatusBarManagerDataNetworkLTE,
-  SDStatusBarManagerDataNetworkWiFi,
-  SDStatusBarManagerDataNetworkPersonalHotspot,
-  SDStatusBarManagerDataNetwork1x,
+  SDStatusBarManagerNetworkTypeGPRS = 0,
+  SDStatusBarManagerNetworkTypeEdge,
+  SDStatusBarManagerNetworkType3G,
+  SDStatusBarManagerNetworkType4G,
+  SDStatusBarManagerNetworkTypeLTE,
+  SDStatusBarManagerNetworkTypeWiFi,
+  SDStatusBarManagerNetworkTypePersonalHotspot,
+  SDStatusBarManagerNetworkType1x,
 };
 
 @interface SDStatusBarManager : NSObject
@@ -49,7 +49,7 @@ typedef NS_ENUM(NSInteger, SDStatusBarManagerDataNetworkMode)
 @property (copy, nonatomic) NSString *timeString;
 @property (assign, nonatomic, readonly) BOOL usingOverrides;
 @property (assign, nonatomic) SDStatusBarManagerBluetoothState bluetoothState;
-@property (assign, nonatomic) SDStatusBarManagerDataNetworkMode dataNetworkMode;
+@property (assign, nonatomic) SDStatusBarManagerNetworkType networkType;
 @property (assign, nonatomic) BOOL airplaneMode;
 @property (assign, nonatomic) BOOL disableWifi;
 @property (assign, nonatomic) BOOL batteryDetailEnabled;

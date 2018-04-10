@@ -34,8 +34,9 @@
 
 static NSString * const SDStatusBarManagerUsingOverridesKey = @"using_overrides";
 static NSString * const SDStatusBarManagerBluetoothStateKey = @"bluetooth_state";
+static NSString * const SDStatusBarManagerNetworkTypeKey = @"network_type";
+static NSString * const SDStatusBarManagerCarrierNameKey = @"carrier_name";
 static NSString * const SDStatusBarManagerTimeStringKey = @"time_string";
-static NSString * const SDStatusBarManagerDataNetworkModeKey = @"data_network_mode";
 static NSString * const SDStatusBarManagerAirplaneModeKey = @"airplane_mode";
 static NSString * const SDStatusBarManagerDisableWifiKey = @"disable_wifi";
 static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_detail_enabled";
@@ -54,7 +55,7 @@ static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_de
   self = [super init];
   if (self) {
     // Set any defaults for the status bar
-    self.dataNetworkMode = SDStatusBarManagerDataNetworkLTE;
+    self.networkType = SDStatusBarManagerNetworkTypeLTE;
 	self.batteryDetailEnabled = YES;
   }
   return self;
@@ -68,10 +69,10 @@ static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_de
   self.overrider.carrierName = self.carrierName;
   self.overrider.bluetoothEnabled = self.bluetoothState != SDStatusBarManagerBluetoothHidden;
   self.overrider.bluetoothConnected = self.bluetoothState == SDStatusBarManagerBluetoothVisibleConnected;
-  self.overrider.dataNetworkMode = self.dataNetworkMode;
   self.overrider.airplaneMode = self.airplaneMode;
   self.overrider.disableWifi = self.disableWifi;
   self.overrider.batteryDetailEnabled = self.batteryDetailEnabled;
+  self.overrider.networkType = self.networkType;
 
   [self.overrider enableOverrides];
 }
@@ -110,6 +111,38 @@ static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_de
   return [[self.userDefaults valueForKey:SDStatusBarManagerBluetoothStateKey] integerValue];
 }
 
+- (void)setNetworkType:(SDStatusBarManagerNetworkType)networkType
+{
+  if (self.networkType == networkType) return;
+  
+  [self.userDefaults setValue:@(networkType) forKey:SDStatusBarManagerNetworkTypeKey];
+  
+  if (self.usingOverrides) {
+    [self enableOverrides];
+  }
+}
+
+- (SDStatusBarManagerNetworkType)networkType
+{
+  return [[self.userDefaults valueForKey:SDStatusBarManagerNetworkTypeKey] integerValue];
+}
+
+- (void)setCarrierName:(NSString *)carrierName
+{
+  if ([self.carrierName isEqualToString:carrierName]) return;
+  
+  [self.userDefaults setObject:carrierName forKey:SDStatusBarManagerCarrierNameKey];
+  
+  if (self.usingOverrides) {
+    [self enableOverrides];
+  }
+}
+
+- (NSString *)carrierName
+{
+  return [self.userDefaults valueForKey:SDStatusBarManagerCarrierNameKey];
+}
+
 - (void)setTimeString:(NSString *)timeString
 {
   if ([self.timeString isEqualToString:timeString]) return;
@@ -124,22 +157,6 @@ static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_de
 - (NSString *)timeString
 {
   return [self.userDefaults valueForKey:SDStatusBarManagerTimeStringKey];
-}
-
-- (void)setDataNetworkMode:(SDStatusBarManagerDataNetworkMode)dataNetworkMode
-{
-  if (self.dataNetworkMode == dataNetworkMode) return;
-  
-  [self.userDefaults setValue:@(dataNetworkMode) forKey:SDStatusBarManagerDataNetworkModeKey];
-  
-  if (self.usingOverrides) {
-    [self enableOverrides];
-  }
-}
-
-- (SDStatusBarManagerDataNetworkMode)dataNetworkMode
-{
-  return [[self.userDefaults valueForKey:SDStatusBarManagerDataNetworkModeKey] integerValue];
 }
 
 - (void)setAirplaneMode:(BOOL)airplaneMode

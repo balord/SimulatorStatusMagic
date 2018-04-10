@@ -120,10 +120,10 @@ typedef struct {
 @synthesize carrierName;
 @synthesize bluetoothConnected;
 @synthesize bluetoothEnabled;
-@synthesize dataNetworkMode;
 @synthesize airplaneMode;
 @synthesize disableWifi;
 @synthesize batteryDetailEnabled;
+@synthesize networkType;
 
 - (void)enableOverrides
 {
@@ -160,13 +160,13 @@ typedef struct {
     overrides->booloverrideItemIsEnabled[5] = 1;
     overrides->values.boolitemIsEnabled[5] = 1;
     overrides->overrideDataNetworkType = 1;
-    overrides->values.dataNetworkType = self.dataNetworkMode;
+    overrides->values.dataNetworkType = self.networkType;
     overrides->disallowsCellularDataNetworkTypes = (self.airplaneMode ? 1 : 0);
   } else {
     overrides->booloverrideItemIsEnabled[5] = 0;
     overrides->values.boolitemIsEnabled[5] = 0;
     overrides->overrideDataNetworkType = 1;
-    overrides->values.dataNetworkType = 5; // WiFi
+    overrides->values.dataNetworkType = SDStatusBarManagerNetworkTypeWiFi;
     overrides->disallowsCellularDataNetworkTypes = 1;
   }
   
@@ -182,17 +182,10 @@ typedef struct {
   strcpy(overrides->values.serviceString, [carrierText cStringUsingEncoding:NSUTF8StringEncoding]);
   
   // Battery
-  if ( self.batteryDetailEnabled ) {
-    overrides->booloverrideItemIsEnabled[8] = 1;
-    overrides->values.boolitemIsEnabled[8] = 1;
-    overrides->overrideBatteryDetailString = 1;
-    strcpy(overrides->values.batteryDetailString, [@"100%" cStringUsingEncoding:NSUTF8StringEncoding]);
-  } else {
-    overrides->booloverrideItemIsEnabled[8] = 1;
-    overrides->values.boolitemIsEnabled[8] = 0;
-    overrides->overrideBatteryDetailString = 1;
-    strcpy(overrides->values.batteryDetailString, [@"" cStringUsingEncoding:NSUTF8StringEncoding]);
-  }
+  overrides->booloverrideItemIsEnabled[8] = 1;
+  overrides->values.boolitemIsEnabled[8] = (self.batteryDetailEnabled ? 1 : 0);
+  overrides->overrideBatteryDetailString = 1;
+  strcpy(overrides->values.batteryDetailString, [(self.batteryDetailEnabled ? @"100%" : @"") cStringUsingEncoding:NSUTF8StringEncoding]);
   
   // Bluetooth
   overrides->booloverrideItemIsEnabled[11] = self.bluetoothEnabled;
@@ -222,6 +215,7 @@ typedef struct {
   // Remove specific overrides (separate flags)
   overrides->overrideTimeString = 0;
   overrides->overrideGsmSignalStrengthBars = 0;
+  overrides->overrideDataNetworkType = 0;
   overrides->overrideBatteryDetailString = 0;
   overrides->overrideBatteryDetailString = 0;
   overrides->overrideBluetoothConnected = 0;
