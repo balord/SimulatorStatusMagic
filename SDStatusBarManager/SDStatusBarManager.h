@@ -53,6 +53,8 @@ typedef NS_ENUM(NSInteger, SDStatusBarManagerNetworkType)
 @property (assign, nonatomic) BOOL airplaneMode;
 @property (assign, nonatomic) BOOL disableWifi;
 @property (assign, nonatomic) BOOL batteryDetailEnabled;
+@property (assign, nonatomic) BOOL iPadDateEnabled;
+@property (assign, nonatomic) BOOL iPadGsmSignalEnabled;
 
 - (void)enableOverrides;
 - (void)disableOverrides;

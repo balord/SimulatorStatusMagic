@@ -31,6 +31,7 @@
 #import "SDStatusBarOverriderPost10_0.h"
 #import "SDStatusBarOverriderPost10_3.h"
 #import "SDStatusBarOverriderPost11_0.h"
+#import "SDStatusBarOverriderPost12_0.h"
 
 static NSString * const SDStatusBarManagerUsingOverridesKey = @"using_overrides";
 static NSString * const SDStatusBarManagerBluetoothStateKey = @"bluetooth_state";
@@ -57,6 +58,8 @@ static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_de
     // Set any defaults for the status bar
     self.networkType = SDStatusBarManagerNetworkTypeLTE;
 	self.batteryDetailEnabled = YES;
+    self.iPadDateEnabled = NO;
+    self.iPadGsmSignalEnabled = NO;
   }
   return self;
 }
@@ -73,6 +76,8 @@ static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_de
   self.overrider.disableWifi = self.disableWifi;
   self.overrider.batteryDetailEnabled = self.batteryDetailEnabled;
   self.overrider.networkType = self.networkType;
+  self.overrider.iPadDateEnabled = self.iPadDateEnabled;
+  self.overrider.iPadGsmSignalEnabled = self.iPadGsmSignalEnabled;
 
   [self.overrider enableOverrides];
 }
@@ -219,7 +224,9 @@ static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_de
 {
   id<SDStatusBarOverrider> overrider = nil;
   NSProcessInfo *pi = [NSProcessInfo processInfo];
-  if ([pi isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){ 11, 0, 0 }]) {
+  if ([pi isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){ 12, 0, 0 }]) {
+    overrider = [SDStatusBarOverriderPost12_0 new];
+  } else if ([pi isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){ 11, 0, 0 }]) {
     overrider = [SDStatusBarOverriderPost11_0 new];
   } else if ([pi isOperatingSystemAtLeastVersion:(NSOperatingSystemVersion){ 10, 3, 0 }]) {
     overrider = [SDStatusBarOverriderPost10_3 new];

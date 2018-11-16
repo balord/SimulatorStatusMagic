@@ -125,6 +125,8 @@ typedef struct {
 @synthesize disableWifi;
 @synthesize batteryDetailEnabled;
 @synthesize networkType;
+@synthesize iPadDateEnabled;
+@synthesize iPadGsmSignalEnabled;
 
 - (void)enableOverrides
 {
