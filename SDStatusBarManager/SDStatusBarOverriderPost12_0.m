@@ -12,8 +12,8 @@
 typedef NS_ENUM(int, StatusBarItem) {
   // 0
   dateStringIpad = 1,
-  // 2
-  // 3
+  DoNotDisturb = 2,
+  AirplaneModeIcon = 3,
   SignalStrengthBars = 4,
   SecondarySignalStrengthBars = 5,
   SignalStrengthBarsVisibleOnIpad = 6,
@@ -21,35 +21,35 @@ typedef NS_ENUM(int, StatusBarItem) {
   // 8
   // 9
   // 10
-  // 11
+  // 11 - clock align right - iPhone only
   // 12
   BatteryDetail = 13,
-  // 14
-  // 15
-  Bluetooth = 16,
-  // 17
-  // 18
+  // 14 - Bluetooth battery detail (text)
+  // 15 - Bluetooth battery detail (graphic) - iPhone only
+  Bluetooth = 16, // iPhone only
+  // 17 - tty
+  // 18 - alarm
   // 19
   // 20
-  // 21
-  // 22
+  // 21 - location services
+  // 22 - rotation lock
   // 23
-  // 24
-  // 25
-  // 26
-  // 27
-  // 28
-  // 29
+  // 24 - AirPlay
+  // 25 - microphone active
+  // 26 - CarPlay
+  // 27 - school desk?
+  // 28 - VPN
+  // 29 - call forwarding
   // 30
-  // 31
+  // 31 - network activity
   // 32
   // 33
   // 34
   // 35
   // 36
-  // 37
-  // 38
-  // 39
+  // 37 - device lock
+  // 38 - water warning?
+  // 39 - headphones?
   // 40
 };
 
@@ -177,6 +177,8 @@ typedef struct {
 @synthesize carrierName;
 @synthesize bluetoothConnected;
 @synthesize bluetoothEnabled;
+@synthesize airplaneMode;
+@synthesize disableWifi;
 @synthesize batteryDetailEnabled;
 @synthesize networkType;
 @synthesize iPadDateEnabled;
@@ -216,9 +218,41 @@ typedef struct {
     }
   }
 
-  overrides->overrideDataNetworkType = self.networkType != SDStatusBarManagerNetworkTypeWiFi;
-  overrides->values.dataNetworkType = self.networkType - 1;
-
+  // Airplane Mode
+  if (!self.airplaneMode) {
+    // hide airplane
+    overrides->values.itemIsEnabled[AirplaneModeIcon] = 0;
+    overrides->overrideItemIsEnabled[AirplaneModeIcon] = 0;
+    // Enable 5 bars of mobile (iPhone only)
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
+      overrides->overrideItemIsEnabled[SignalStrengthBars] = 1;
+      overrides->values.itemIsEnabled[SignalStrengthBars] = 1;
+      overrides->overrideGsmSignalStrengthBars = 1;
+      overrides->values.gsmSignalStrengthBars = 5;
+    }
+  } else {
+    // show airplane
+    overrides->values.itemIsEnabled[AirplaneModeIcon] = 1;
+    overrides->overrideItemIsEnabled[AirplaneModeIcon] = 1;
+    // remove any previous 5 bars override
+    overrides->overrideItemIsEnabled[SignalStrengthBars] = 0;
+    overrides->values.itemIsEnabled[SignalStrengthBars] = 0;
+    overrides->overrideGsmSignalStrengthBars = 0;
+  }
+  
+  // Data Network
+  overrides->overrideDataNetworkType = 1;
+  overrides->values.dataNetworkType = self.networkType;
+  overrides->overrideSecondaryDataNetworkType = 1;
+  if (self.disableWifi) {
+    overrides->values.secondaryDataNetworkType = self.networkType;
+    overrides->disallowsCellularDataNetworkTypes = (self.airplaneMode ? 1 : 0);
+  } else {
+    overrides->overrideSecondaryDataNetworkType = 1;
+    overrides->values.secondaryDataNetworkType = SDStatusBarManagerNetworkTypeWiFi;
+    overrides->disallowsCellularDataNetworkTypes = 1;
+  }
+  
   // Remove carrier text for iPhone, set it to "iPad" for the iPad
   overrides->overrideServiceString = 1;
   NSString *carrierText = self.carrierName;
@@ -264,6 +298,7 @@ typedef struct {
   overrides->overrideTimeString = 0;
   overrides->overrideGsmSignalStrengthBars = 0;
   overrides->overrideDataNetworkType = 0;
+  overrides->overrideSecondaryDataNetworkType = 0;
   overrides->overrideBatteryCapacity = 0;
   overrides->overrideBatteryState = 0;
   overrides->overrideBatteryDetailString = 0;
