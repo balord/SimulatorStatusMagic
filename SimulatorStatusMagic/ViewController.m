@@ -107,7 +107,6 @@
 {
   BOOL disabled = !sender.isOn;
   [[SDStatusBarManager sharedInstance] setDisableWifi:disabled];
-  [self setNetworkSegmentedControlEnabled];
 }
 
 - (IBAction)showBatteryPercentageStatusChanged:(UISwitch *)sender
@@ -158,7 +157,7 @@
 
 - (void)setNetworkSegmentedControlEnabled
 {
-  self.networkSegmentedControl.enabled = (!self.airplaneModeSwitch.isOn && !self.wifiSwitch.isOn);
+  self.networkSegmentedControl.enabled = !self.airplaneModeSwitch.isOn;
 }
     
 - (void)setAirplaneModeSwitchPosition
