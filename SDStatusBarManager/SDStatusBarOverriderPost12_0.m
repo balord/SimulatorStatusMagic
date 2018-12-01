@@ -269,7 +269,8 @@ typedef struct {
   overrides->overrideBatteryState = YES;
   overrides->values.batteryState = BatteryStateUnplugged;
   overrides->overrideBatteryDetailString = YES;
-  NSString *batteryDetailString = [NSString stringWithFormat:@"%@%%", @(overrides->values.batteryCapacity)];
+  NSString *batteryDetailString = self.batteryDetailEnabled ? [NSString stringWithFormat:@"%@%%", @(overrides->values.batteryCapacity)] : @" ";
+  // Setting this to an empty string will not work, it needs to be a @" "
   strcpy(overrides->values.batteryDetailString, [batteryDetailString cStringUsingEncoding:NSUTF8StringEncoding]);
 
   // Bluetooth
@@ -282,7 +283,14 @@ typedef struct {
 
   // Actually update the status bar
   [UIStatusBarServer postStatusBarOverrideData:overrides];
-
+  
+  // Remove the @" " used to trick the battery percentage into not showing, if used
+  if (!self.batteryDetailEnabled) {
+    batteryDetailString = @"";
+    strcpy(overrides->values.batteryDetailString, [batteryDetailString cStringUsingEncoding:NSUTF8StringEncoding]);
+    [UIStatusBarServer postStatusBarOverrideData:overrides];
+  }
+  
   // Lock in the changes, reset simulator will remove this
   [UIStatusBarServer permanentizeStatusBarOverrideData];
 }
