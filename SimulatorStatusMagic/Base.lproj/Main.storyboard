@@ -145,6 +145,22 @@
                                             <outlet property="delegate" destination="BYZ-38-t0r" id="pAl-PL-KXu"/>
                                         </connections>
                                     </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eIb-YX-XaO">
+                                        <rect key="frame" x="0.0" y="294" width="303" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Tue Jan 9" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SDw-De-k5w">
+                                        <rect key="frame" x="0.0" y="326.5" width="303" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <action selector="dateStringTextFieldEditingChanged:" destination="BYZ-38-t0r" eventType="editingChanged" id="kuV-Nn-JHv"/>
+                                            <outlet property="delegate" destination="BYZ-38-t0r" id="wo8-rI-sM3"/>
+                                        </connections>
+                                    </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w0W-Cx-jCM">
                                         <rect key="frame" x="0.0" y="420" width="343" height="33"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
@@ -169,6 +185,8 @@
                         <outlet property="batteryPercentageSwitch" destination="Tot-m5-B2j" id="yvU-Xw-aKm"/>
                         <outlet property="bluetoothSegmentedControl" destination="ESw-bP-Eft" id="CvD-yz-7Fk"/>
                         <outlet property="carrierNameTextField" destination="gAn-fq-dJa" id="nxI-oF-1tt"/>
+                        <outlet property="dateStringLabel" destination="eIb-YX-XaO" id="cfS-nu-4Bz"/>
+                        <outlet property="dateStringTextField" destination="SDw-De-k5w" id="hg6-pS-IfR"/>
                         <outlet property="networkModeSegmentedControl" destination="hoe-iY-qSQ" id="815-Jf-7MZ"/>
                         <outlet property="networkTypeSegmentedControl" destination="reB-UP-GIC" id="6Ka-e0-FKR"/>
                         <outlet property="overrideButton" destination="w0W-Cx-jCM" id="kCn-jU-1yy"/>

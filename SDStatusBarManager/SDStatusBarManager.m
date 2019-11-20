@@ -38,6 +38,7 @@ static NSString * const SDStatusBarManagerBluetoothStateKey = @"bluetooth_state"
 static NSString * const SDStatusBarManagerNetworkTypeKey = @"network_type";
 static NSString * const SDStatusBarManagerCarrierNameKey = @"carrier_name";
 static NSString * const SDStatusBarManagerTimeStringKey = @"time_string";
+static NSString * const SDStatusBarManagerDateStringKey = @"date_string";
 static NSString * const SDStatusBarManagerAirplaneModeKey = @"airplane_mode";
 static NSString * const SDStatusBarManagerDisableWifiKey = @"disable_wifi";
 static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_detail_enabled";
@@ -69,6 +70,7 @@ static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_de
   self.usingOverrides = YES;
 
   self.overrider.timeString = [self localizedTimeString];
+  self.overrider.dateString = [self localizedDateString];
   self.overrider.carrierName = self.carrierName;
   self.overrider.bluetoothEnabled = self.bluetoothState != SDStatusBarManagerBluetoothHidden;
   self.overrider.bluetoothConnected = self.bluetoothState == SDStatusBarManagerBluetoothVisibleConnected;
@@ -162,6 +164,22 @@ static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_de
 - (NSString *)timeString
 {
   return [self.userDefaults valueForKey:SDStatusBarManagerTimeStringKey];
+}
+
+- (void)setDateString:(NSString *)dateString
+{
+  if ([self.dateString isEqualToString:dateString]) return;
+  
+  [self.userDefaults setObject:dateString forKey:SDStatusBarManagerDateStringKey];
+  
+  if (self.usingOverrides) {
+    [self enableOverrides];
+  }
+}
+
+- (NSString *)dateString
+{
+  return [self.userDefaults valueForKey:SDStatusBarManagerDateStringKey];
 }
 
 - (void)setAirplaneMode:(BOOL)airplaneMode
@@ -268,6 +286,23 @@ static NSString * const SDStatusBarManagerBatteryDetailEnabledKey = @"battery_de
   components.hour = 9;
   components.minute = 41;
 
+  return [formatter stringFromDate:[[NSCalendar currentCalendar] dateFromComponents:components]];
+}
+
+- (NSString *)localizedDateString
+{
+  if (self.dateString.length > 0) {
+    return self.dateString;
+  }
+  
+  NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+  formatter.dateFormat = [[NSDateFormatter dateFormatFromTemplate:@"EEE MMM d" options:0 locale:NSLocale.currentLocale] stringByReplacingOccurrencesOfString:@"," withString:@""];
+  
+  NSDateComponents *components = [[NSCalendar currentCalendar] components:  NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[NSDate date]];
+  components.day = 9;
+  components.month = 1;
+  components.year = 2007;
+  
   return [formatter stringFromDate:[[NSCalendar currentCalendar] dateFromComponents:components]];
 }
 

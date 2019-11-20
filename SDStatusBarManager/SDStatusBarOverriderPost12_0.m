@@ -10,46 +10,46 @@
 #import "SDStatusBarOverriderPost12_0.h"
 
 typedef NS_ENUM(int, StatusBarItem) {
-  // 0
-  dateStringIpad = 1,
-  DoNotDisturb = 2,
-  AirplaneModeIcon = 3,
-  SignalStrengthBars = 4,
-  SecondarySignalStrengthBars = 5,
-  SignalStrengthBarsVisibleOnIpad = 6,
-  // 7
+  TimeStatusBarItem = 0,
+  DateStatusBarItem = 1,
+  QuietModeStatusBarItem = 2,
+  AirplaneModeStatusBarItem = 3,
+  CellularSignalStrengthStatusBarItem = 4,
+  SecondaryCellularSignalStrengthStatusBarItem = 5,
+  CellularServiceStatusBarItem = 6,
+  SecondaryCellularServiceStatusBarItem = 7,
   // 8
-  // 9
-  // 10
-  // 11 - clock align right - iPhone only
-  // 12
-  BatteryDetail = 13,
-  // 14 - Bluetooth battery detail (text)
-  // 15 - Bluetooth battery detail (graphic) - iPhone only
-  Bluetooth = 16, // iPhone only
-  // 17 - tty
-  // 18 - alarm
+  CellularDataNetworkStatusBarItem = 9,
+  SecondaryCellularDataNetworkStatusBarItem = 10,
+  // 11
+  MainBatteryStatusBarItem = 12,
+  ProminentlyShowBatteryDetailStatusBarItem = 13,
+  // 14
+  // 15
+  BluetoothStatusBarItem = 16,
+  TTYStatusBarItem = 17,
+  AlarmStatusBarItem = 18,
   // 19
   // 20
-  // 21 - location services
-  // 22 - rotation lock
+  LocationStatusBarItem = 21,
+  RotationLockStatusBarItem = 22,
   // 23
-  // 24 - AirPlay
-  // 25 - microphone active
-  // 26 - CarPlay
-  // 27 - school desk?
-  // 28 - VPN
-  // 29 - call forwarding
+  AirPlayStatusBarItem = 24,
+  AssistantStatusBarItem = 25,
+  CarPlayStatusBarItem = 26,
+  StudentStatusBarItem = 27,
+  VPNStatusBarItem = 28,
+  // 29
   // 30
-  // 31 - network activity
+  // 31
   // 32
   // 33
   // 34
   // 35
   // 36
-  // 37 - device lock
-  // 38 - water warning?
-  // 39 - headphones?
+  // 37
+  LiquidDetectionStatusBarItem = 38,
+  // 39
   // 40
 };
 
@@ -174,6 +174,7 @@ typedef struct {
 @implementation SDStatusBarOverriderPost12_0
 
 @synthesize timeString;
+@synthesize dateString;
 @synthesize carrierName;
 @synthesize bluetoothConnected;
 @synthesize bluetoothEnabled;
@@ -191,16 +192,20 @@ typedef struct {
   strcpy(overrides->values.timeString, [self.timeString cStringUsingEncoding:NSUTF8StringEncoding]);
   overrides->overrideTimeString = 1;
   
+  // Set Tue Jan 9 in current localization
+  strcpy(overrides->values.dateString, [self.dateString cStringUsingEncoding:NSUTF8StringEncoding]);
+  overrides->overrideDateString = 1;
+  
   // Show / Hide date on iPad
   if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-    overrides->overrideItemIsEnabled[dateStringIpad] = 1;
-    overrides->values.itemIsEnabled[dateStringIpad] = self.iPadDateEnabled ? 1 : 0;
+    overrides->overrideItemIsEnabled[DateStatusBarItem] = 1;
+    overrides->values.itemIsEnabled[DateStatusBarItem] = self.iPadDateEnabled ? 1 : 0;
   }
 
   // Enable 5 bars of mobile (iPhone only)
   if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-    overrides->overrideItemIsEnabled[SignalStrengthBars] = 1;
-    overrides->values.itemIsEnabled[SignalStrengthBars] = 1;
+    overrides->overrideItemIsEnabled[CellularSignalStrengthStatusBarItem] = 1;
+    overrides->values.itemIsEnabled[CellularSignalStrengthStatusBarItem] = 1;
     overrides->overrideGsmSignalStrengthBars = 1;
     overrides->values.gsmSignalStrengthBars = 5;
   }
@@ -208,35 +213,35 @@ typedef struct {
   // Enable / Disable GSM signal bars on iPad
   if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
     if (self.iPadGsmSignalEnabled) {
-      overrides->overrideItemIsEnabled[SignalStrengthBars] = 1;
-      overrides->values.itemIsEnabled[SignalStrengthBars] = 1;
+      overrides->overrideItemIsEnabled[CellularSignalStrengthStatusBarItem] = 1;
+      overrides->values.itemIsEnabled[CellularSignalStrengthStatusBarItem] = 1;
       overrides->overrideGsmSignalStrengthBars = 1;
       overrides->values.gsmSignalStrengthBars = 5;
     } else {
-      overrides->overrideItemIsEnabled[SignalStrengthBarsVisibleOnIpad] = 1;
-      overrides->values.itemIsEnabled[SignalStrengthBars] = 0;
+      overrides->overrideItemIsEnabled[CellularSignalStrengthStatusBarItem] = 1;
+      overrides->values.itemIsEnabled[CellularSignalStrengthStatusBarItem] = 0;
     }
   }
 
   // Airplane Mode
   if (!self.airplaneMode) {
     // hide airplane
-    overrides->values.itemIsEnabled[AirplaneModeIcon] = 0;
-    overrides->overrideItemIsEnabled[AirplaneModeIcon] = 0;
+    overrides->values.itemIsEnabled[AirplaneModeStatusBarItem] = 0;
+    overrides->overrideItemIsEnabled[AirplaneModeStatusBarItem] = 0;
     // Enable 5 bars of mobile (iPhone only)
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) {
-      overrides->overrideItemIsEnabled[SignalStrengthBars] = 1;
-      overrides->values.itemIsEnabled[SignalStrengthBars] = 1;
+      overrides->overrideItemIsEnabled[CellularSignalStrengthStatusBarItem] = 1;
+      overrides->values.itemIsEnabled[CellularSignalStrengthStatusBarItem] = 1;
       overrides->overrideGsmSignalStrengthBars = 1;
       overrides->values.gsmSignalStrengthBars = 5;
     }
   } else {
     // show airplane
-    overrides->values.itemIsEnabled[AirplaneModeIcon] = 1;
-    overrides->overrideItemIsEnabled[AirplaneModeIcon] = 1;
+    overrides->values.itemIsEnabled[AirplaneModeStatusBarItem] = 1;
+    overrides->overrideItemIsEnabled[AirplaneModeStatusBarItem] = 1;
     // remove any previous 5 bars override
-    overrides->overrideItemIsEnabled[SignalStrengthBars] = 0;
-    overrides->values.itemIsEnabled[SignalStrengthBars] = 0;
+    overrides->overrideItemIsEnabled[CellularSignalStrengthStatusBarItem] = 0;
+    overrides->values.itemIsEnabled[CellularSignalStrengthStatusBarItem] = 0;
     overrides->overrideGsmSignalStrengthBars = 0;
   }
   
@@ -262,8 +267,8 @@ typedef struct {
   strcpy(overrides->values.serviceString, [carrierText cStringUsingEncoding:NSUTF8StringEncoding]);
 
   // Battery: 100% and unplugged
-  overrides->overrideItemIsEnabled[BatteryDetail] = YES;
-  overrides->values.itemIsEnabled[BatteryDetail] = self.batteryDetailEnabled;
+  overrides->overrideItemIsEnabled[ProminentlyShowBatteryDetailStatusBarItem] = YES;
+  overrides->values.itemIsEnabled[ProminentlyShowBatteryDetailStatusBarItem] = self.batteryDetailEnabled;
   overrides->overrideBatteryCapacity = YES;
   overrides->values.batteryCapacity = 100;
   overrides->overrideBatteryState = YES;
@@ -274,8 +279,8 @@ typedef struct {
   strcpy(overrides->values.batteryDetailString, [batteryDetailString cStringUsingEncoding:NSUTF8StringEncoding]);
 
   // Bluetooth
-  overrides->overrideItemIsEnabled[Bluetooth] = !!self.bluetoothEnabled;
-  overrides->values.itemIsEnabled[Bluetooth] = !!self.bluetoothEnabled;
+  overrides->overrideItemIsEnabled[BluetoothStatusBarItem] = !!self.bluetoothEnabled;
+  overrides->values.itemIsEnabled[BluetoothStatusBarItem] = !!self.bluetoothEnabled;
   if (self.bluetoothEnabled) {
     overrides->overrideBluetoothConnected = self.bluetoothConnected;
     overrides->values.bluetoothConnected = self.bluetoothConnected;
@@ -304,6 +309,7 @@ typedef struct {
 
   // Remove specific overrides (separate flags)
   overrides->overrideTimeString = 0;
+  overrides->overrideDateString = 0;
   overrides->overrideGsmSignalStrengthBars = 0;
   overrides->overrideDataNetworkType = 0;
   overrides->overrideSecondaryDataNetworkType = 0;
